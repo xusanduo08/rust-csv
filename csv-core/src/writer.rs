@@ -285,8 +285,8 @@ impl Writer {
 
         if !self.state.in_field {
             self.state.quoting = self.should_quote(input);
-            if self.state.quoting {
-                let (res, o) = self.write(&[self.quote], output);
+            if self.state.quoting { // 如果需要引号的话
+                let (res, o) = self.write(&[self.quote], output); // 将引号首先写入到output中
                 if o == 0 {
                     return (res, 0, 0);
                 }
@@ -296,7 +296,7 @@ impl Writer {
             }
             self.state.in_field = true;
         }
-        let (res, i, o) = if self.state.quoting {
+        let (res, i, o) = if self.state.quoting { // 继续写入内容
             quote(input, output, self.quote, self.escape, self.double_quote)
         } else {
             write_optimistic(input, output)
@@ -525,7 +525,7 @@ pub fn is_non_numeric(input: &[u8]) -> bool {
 ///
 /// N.B. This function is provided for low level usage. It is called
 /// automatically if you're using a `Writer`.
-pub fn quote(
+pub fn quote( // 写入字段内容及末尾引号到output中
     mut input: &[u8],
     mut output: &mut [u8],
     quote: u8,
@@ -534,14 +534,14 @@ pub fn quote(
 ) -> (WriteResult, usize, usize) {
     let (mut nin, mut nout) = (0, 0);
     loop {
-        match memchr(quote, input) {
+        match memchr(quote, input) { // input中是否有引号
             None => {
                 let (res, i, o) = write_optimistic(input, output);
                 nin += i;
                 nout += o;
                 return (res, nin, nout);
             }
-            Some(next_quote) => {
+            Some(next_quote) => { // input中有引号
                 let (res, i, o) =
                     write_optimistic(&input[..next_quote], output);
                 input = &input[i..];
