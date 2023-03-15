@@ -274,6 +274,7 @@ impl Writer {
     /// or `terminator` first.
     ///
     /// If this writer's quoting style is `QuoteStyle::Necessary`, then `input`
+    /// 如果字段需要引号，那么输入内容还要包含整个字段。否则无法判断字段是否需要引号
     /// should contain the *entire* field. Otherwise, whether the field needs
     /// to be quoted or not cannot be determined.
     pub fn field(
