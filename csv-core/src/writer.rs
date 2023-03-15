@@ -504,6 +504,7 @@ pub fn is_non_numeric(input: &[u8]) -> bool {
 ///
 /// If `input` does not have a `quote`, then the contents of `input` are
 /// copied verbatim to `output`.
+/// 如果input不包含引号，那么input会逐字的复制到output中
 ///
 /// If `output` is not big enough to store the fully quoted contents of
 /// `input`, then `WriteResult::OutputFull` is returned. The `output` buffer
