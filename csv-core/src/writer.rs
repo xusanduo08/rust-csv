@@ -206,15 +206,18 @@ struct WriterState {
     /// This is set whenever we've begun writing the contents of a field, even
     /// if the contents are empty. We use it to avoid re-computing whether
     /// quotes are necessary.
+    // 开始写入字段时就置为true，即使这个字段的内容为空。
     in_field: bool,
     /// This is set whenever we've started writing a field that is enclosed in
     /// quotes. When the writer is finished, or if a delimiter or terminator
     /// are written, then a closing quote is inserted when this is true.
+    // 在写入包裹在引号里的字段时就会被置为true，此时如果遇到分隔符或者换行符就会插入一个关闭引号
     quoting: bool,
     /// The number of total bytes written for the current record.
     ///
     /// If the writer is finished or a terminator is written when this is `0`,
     /// then an empty field is added as a pair of adjacent quotes.
+    // 当前记录写入的字节长度
     record_bytes: u64,
 }
 
@@ -515,14 +518,17 @@ pub fn is_non_numeric(input: &[u8]) -> bool {
 /// `WriteResult::InputEmpty` is returned. It is possible to write an infinite
 /// loop if your output buffer is less than 2 bytes in length (the minimum
 /// storage space required to store an escaped quote).
+// quote需要被循环调用，直到input被写完
 ///
 /// In addition to the `WriteResult`, the number of consumed bytes from `input`
 /// and the number of bytes written to `output` are also returned.
+// input里被消费的字节长度以及写入到output的字节长度也会被返回
 ///
 /// `quote` is the quote byte and `escape` is the escape byte. If
+// quote引号字符，escape是转义字符
 /// `double_quote` is true, then quotes are escaped by doubling them,
 /// otherwise, quotes are escaped with the `escape` byte.
-///
+/// 
 /// N.B. This function is provided for low level usage. It is called
 /// automatically if you're using a `Writer`.
 pub fn quote( // 写入字段内容及末尾引号到output中
