@@ -529,6 +529,7 @@ impl Reader {
     /// there is no CSV data left to read. Namely, when the caller has
     /// exhausted all CSV data, the caller should continue to call `read` with
     /// an empty input buffer until `ReadFieldResult::End` is returned.
+    /// 对于reader来讲，空的input则表明csv data读取结束。也就是说，当所有数据读取完毕时，用户必须用的空的input调用一下read方法，直到返回`ReadFileResult::End` 返回
     ///
     /// # Errors
     ///
